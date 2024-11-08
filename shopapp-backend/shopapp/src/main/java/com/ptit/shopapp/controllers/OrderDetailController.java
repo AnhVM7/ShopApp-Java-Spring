@@ -72,8 +72,8 @@ public class OrderDetailController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deleteOrderDetail(@Valid @PathVariable Long id){
+  public ResponseEntity<?> deleteOrderDetail(@Valid @PathVariable Long id){
     orderDetailService.deleteOrderDetail(id);
-    return ResponseEntity.noContent().build();
+    return ResponseEntity.ok("delete order detail with id = " + id);
   }
 }

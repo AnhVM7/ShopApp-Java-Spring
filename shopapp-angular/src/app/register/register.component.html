@@ -1,0 +1,89 @@
+<!-- <app-header></app-header> -->
+<div class="container">
+    <form #registerForm="ngForm"> 
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="register-form mx-auto">
+                <h2 class="register-header">Dang ky</h2>
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="text" class="form-control"
+                        [(ngModel)]="phone"
+                        (input)="onPhoneChange()"
+                        name="phone"
+                        (focus)="registerForm.form.markAsTouched()"
+                    required id="phone">
+                    <div class="divider-nospace"></div>
+                    <p class="text-danger" *ngIf="phone.length < 6 && registerForm.form.touched">phone phai co it nhat 6 ki tu</p>
+                </div>
+                <div class="mt-3"></div>
+                <div class="form-group password-field">
+                    <label for="password">Mat khau</label>
+                    <input type="password" placeholder="It nhat 3 ky tu"
+                        [(ngModel)]="password"
+                        name="password"
+                    required class="form-control" id="password">
+                    <i class="password-toggle fas fa-eye-slash"></i>
+                    <div class="divider-nospace"></div>
+                    <p class="text-danger" *ngIf="password.length < 3 && registerForm.form.touched">mat khau phai co it nhat 3 ki tu</p>
+                </div>
+                <div class="mt-3"></div>
+                <div class="form-group password-field">
+                    <label for="retype-password">Go lai mat khau</label>
+                    <input type="password" placeholder="It nhat 3 ky tu" 
+                        [(ngModel)]="retypePassword"
+                        name="retypePassword"
+                        (input)="registerForm.form.markAsTouched(); checkPasswordMatch()"
+                    required class="form-control" id="retype-password">
+                    <i class="password-toggle fas fa-eye-slash"></i>
+                    <div class="divider-nospace"></div>
+                    <p class="text-danger" *ngIf="retypePassword.length < 3 && registerForm.form.touched">mat khau go lai phai co it nhat 3 ki tu</p>
+                    <p class="text-danger" *ngIf="registerForm.controls['retypePassword'].hasError('passwordMismatch') && registerForm.form.touched">mat khau khong khop</p>
+                </div>
+                <div class="mt-3"></div>
+                <div class="form-group">
+                    <label for="full-name">Ho va ten</label>
+                    <input type="text" class="form-control"
+                        [(ngModel)]="fullName"
+                    required id="full-name">
+                    <div class="divider-nospace"></div>
+                </div>
+                <div class="mt-3"></div>
+                <div class="form-group">
+                    <label for="date-of-birth">Ngay sinh</label>
+                    <input type="date" class="form-control"
+                        [(ngModel)]="dateOfBirth"
+                    required id="date-of-birth">
+                    <div class="divider-nospace"></div>
+                </div>
+                <div class="mt-3"></div>
+                <div class="form-group">
+                    <label for="address">Dia chi</label>
+                    <input type="text" class="form-control"
+                        [(ngModel)]="address"
+                    id="address">
+                    <div class="divider-nospace"></div>
+                </div>
+                <div class="form-group">
+                    <div class="form-check checkbox-text">
+                        <span style="display: flex;">
+                            <input type="checkbox" class="form-check-input"
+                                [(ngModel)]="isAccepted"
+                            id="agree">
+                            <label class="form-check-label text-start" for="agree">Toi dong y voi cac dieu kien</label>
+                        </span>
+                    </div>
+                </div>
+                <button type="button"
+                (click)="register()"
+                 class="register-button">Dang ky</button>
+                <div class="divider"></div>
+                <p class="text-center">Ban da co tai khoan? <span><a href="#" class="register-link">Dang nhap</a></span></p>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
+<app-footer></app-footer>
+
+

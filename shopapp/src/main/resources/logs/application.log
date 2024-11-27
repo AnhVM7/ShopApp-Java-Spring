@@ -681,3 +681,7 @@ Security filter chain: [
 2024-11-27 11:30:07.285 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
 2024-11-27 11:30:07.287 [restartedMain] INFO  com.ptit.shopapp.ShopappApplication - Started ShopappApplication in 0.927 seconds (process running for 710.481)
 2024-11-27 11:30:07.289 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2024-11-27 11:55:33.854 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-11-27 11:55:34.555 [Thread-53] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-11-27 11:55:34.661 [Thread-53] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-13 - Shutdown initiated...
+2024-11-27 11:55:34.727 [Thread-53] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-13 - Shutdown completed.

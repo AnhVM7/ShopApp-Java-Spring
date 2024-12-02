@@ -83,7 +83,7 @@ public class WebSecurityConfig {
                   String.format("%s/order_details/**", apiPrefix)).hasRole(Role.ADMIN)
               .anyRequest().authenticated();
         }).csrf(AbstractHttpConfigurer::disable);
-    http.cors(new Customizer<CorsConfigurer<HttpSecurity>>() {
+    /*http.cors(new Customizer<CorsConfigurer<HttpSecurity>>() {
       @Override
       public void customize(CorsConfigurer<HttpSecurity> httpSecurityCorsConfigurer) {
 
@@ -97,7 +97,7 @@ public class WebSecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         httpSecurityCorsConfigurer.configurationSource(source);
       }
-    });
+    });*/
 
 
     return http.build();

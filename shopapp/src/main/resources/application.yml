@@ -21,6 +21,12 @@ spring:
     basename: i18n/message
     encoding: UTF-8
     default-locale: en
+  #flyway
+  # duong dan toi thu muc chua cac script flyway
+  flyway:
+    locations: classpath:/db/migration,classpath:/dev/db/migration
+    baseline-on-migrate: true
+    baseline-version: 0
 api:
   prefix: api/v1
 logging:
@@ -31,5 +37,7 @@ jwt:
   secretKey: 8pwwqGd9QvaB9idTkGvwqI8nEpu5ho/qHI/wRy5yUrM=
 
 logging.level.org.springframework.security: DEBUG
+
+
 
 

@@ -15,4 +15,5 @@ public class MessageKey {
   public static final String UPLOAD_IMAGES_FILE_MUST_BE_IMAGE = "product.upload_images.file_must_be_image";
   public static final String REGISTER_SUCCESSFULLY = "user.register.register_successfully";
   public static final String REGISTER_FAILED = "user.register.register_failed";
+  public static final String USER_IS_LOCKED = "user has been locked";
 }

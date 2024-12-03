@@ -1,7 +1,9 @@
 package com.ptit.shopapp.components;
 
 import com.ptit.shopapp.exceptions.InvalidParamException;
+import com.ptit.shopapp.models.Token;
 import com.ptit.shopapp.models.User;
+import com.ptit.shopapp.repositories.TokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -15,6 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -22,6 +26,8 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class JwtTokenUtil {
+  private final TokenRepository tokenRepository;
+  private final Logger logger = LoggerFactory.getLogger(JwtTokenUtil.class);
   @Value("${jwt.expiration}")
   private int expiration; // luu vao bien moi truong
 
@@ -85,8 +91,12 @@ public class JwtTokenUtil {
     return extractClaim(token, Claims::getSubject);
   }
 
-  public boolean validateToken(String token, UserDetails userDetails){
+  public boolean validateToken(String token, User userDetails){
     String phoneNumber = extractPhoneNumber(token);
+    Token existingToken = tokenRepository.findByToken(token);
+    if(existingToken == null || existingToken.getIsRevoked() == true || !userDetails.isActive()) {
+      return false;
+    }
     return (phoneNumber.equals(userDetails.getUsername())) && !isTokenExpired(token);
   }
 }

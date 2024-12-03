@@ -37,11 +37,13 @@ public class Token {
   @Column(name = "expiration_date")
   private LocalDateTime expirationDate;
 
-  private Boolean revoked;
+  private Boolean isRevoked;
 
-  private Boolean expired;
+  private Boolean isExpired;
 
   @ManyToOne
   @JoinColumn(name = "user_id")
   private User user;
+
+  private boolean isMobile;
 }

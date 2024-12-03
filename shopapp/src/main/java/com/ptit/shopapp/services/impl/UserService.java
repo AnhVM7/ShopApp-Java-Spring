@@ -1,21 +1,29 @@
 package com.ptit.shopapp.services.impl;
 
 import com.ptit.shopapp.components.JwtTokenUtil;
+import com.ptit.shopapp.components.LocalizationUtil;
 import com.ptit.shopapp.dtos.UpdateUserDTO;
 import com.ptit.shopapp.dtos.UserDTO;
 import com.ptit.shopapp.exceptions.DataNotFoundException;
+import com.ptit.shopapp.exceptions.InvalidPasswordException;
 import com.ptit.shopapp.exceptions.PermissionDenyException;
 import com.ptit.shopapp.models.Role;
+import com.ptit.shopapp.models.Token;
 import com.ptit.shopapp.models.User;
 import com.ptit.shopapp.repositories.RoleRepository;
+import com.ptit.shopapp.repositories.TokenRepository;
 import com.ptit.shopapp.repositories.UserRepository;
 import com.ptit.shopapp.responses.UserResponse;
 import com.ptit.shopapp.services.IUserService;
+import com.ptit.shopapp.utils.MessageKey;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,7 +34,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService implements IUserService {
   private final ModelMapper modelMapper;
+  private LocalizationUtil localizationUtil;
 
+  private final TokenRepository tokenRepository;
   private final UserRepository userRepository;
   private final RoleRepository roleRepository;
   private final PasswordEncoder passwordEncoder;
@@ -81,6 +91,9 @@ public class UserService implements IUserService {
       if(!passwordEncoder.matches(password, existingUser.getPassword())){
         throw new BadCredentialsException("wrong phonenumber/ password");
       }
+    }
+    if (!userOptional.get().isActive()) {
+      throw new DataNotFoundException(localizationUtil.getLocalizedMessage(MessageKey.USER_IS_LOCKED));
     }
     UsernamePasswordAuthenticationToken authenticationToken =
         new UsernamePasswordAuthenticationToken(
@@ -156,6 +169,33 @@ public class UserService implements IUserService {
     //existingUser.setRole(updatedRole);
     // Save the updated user
     return userRepository.save(existingUser);
+  }
+
+  @Override
+  public Page<User> findAll(String keyword, Pageable pageable) throws Exception{
+    return userRepository.findAll(keyword, pageable);
+  }
+
+  @Override
+  @Transactional
+  public void resetPassword(Long userId, String newPassword) throws InvalidPasswordException, DataNotFoundException {
+    User existingUser = userRepository.findById(userId)
+        .orElseThrow(() -> new DataNotFoundException("user not found"));
+    String encodesPassword = passwordEncoder.encode(newPassword);
+    existingUser.setPassword(encodesPassword);
+    userRepository.save(existingUser);
+    // reset password -> clear token
+    List<Token> tokens = tokenRepository.findByUser(existingUser);
+    tokens.forEach(token -> tokenRepository.delete(token));
+  }
+
+  @Override
+  @Transactional
+  public void blockOrEnable(Long userId, Boolean active) throws DataNotFoundException {
+    User existingUser = userRepository.findById(userId)
+        .orElseThrow(() -> new DataNotFoundException("user not found"));
+    existingUser.setActive(active);
+    userRepository.save(existingUser);
   }
 
 }
